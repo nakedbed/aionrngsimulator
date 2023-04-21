@@ -22,11 +22,11 @@
 }
 
 /* Turn off parallax scrolling for tablets and phones. Increase the pixels if needed */
-@media only screen and (max-device-width: 1366px) {
+/*@media only screen and (max-device-width: 1366px) {
   .container-fluid {
     background-attachment: scroll;
   }
-}
+}*/
 
 .block {
   background-origin: padding-box;
