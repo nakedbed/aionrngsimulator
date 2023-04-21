@@ -148,7 +148,7 @@
                             </div>
                         </div>
                         <!----------------------------------------------------------------- FOURTY GEAR ----------------------------------------------------------------->
-                        <div class="col s12 m6 l6 center block">
+                        <div class="col s12 m6 l6 center margin_top_2 block">
                             <div class="btn-floating pulse orange center margin_bottom" v-if="fourty_actual != 15">
                                 +{{ fourty_actual }}
                             </div>
@@ -350,7 +350,7 @@
                             </div>
                         </div>
                         <!----------------------------------------------------------------- FIFTY ETERNAL GEAR ----------------------------------------------------------------->
-                        <div class="col s12 m6 l6 center block">
+                        <div class="col s12 m6 l6 center margin_top_2 block">
                             <div class="btn-floating pulse orange center margin_bottom" v-if="fifty_eternal_actual != 15">
                                 +{{ fifty_eternal_actual }}
                             </div>
@@ -552,7 +552,7 @@
                             </div>
                         </div>
                         <!----------------------------------------------------------------- FIFTYFIVE ETERNAL GEAR ----------------------------------------------------------------->
-                        <div class="col s12 m6 l6 center block">
+                        <div class="col s12 m6 l6 center margin_top_2 block">
                             <div class="btn-floating pulse orange center margin_bottom" v-if="fifty_five_eternal_actual != 15">
                                 +{{ fifty_five_eternal_actual }}
                             </div>
@@ -708,16 +708,14 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row">
-                                <button class="btn waves-effect waves-light col s12 m6 l4" @click="a_resetlvl">Reset level</button>
-                                <button class="btn waves-effect waves-light col s12 m6 l4" @click="a_resetstones">Reset stones</button>
-                                <button class="btn waves-effect waves-light red col s12 m12 l4" @click="a_resetall">Reset both</button>
-                            </div>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="a_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="a_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light red col s12 m12 l4" @click="a_resetall">Reset both</button>
                         </div>
 
                         <!----------------------------------------------------------------- LEGENDARY GEAR ----------------------------------------------------------------->
 
-                        <div class="col s12 m4 l4 center block">
+                        <div class="col s12 m4 l4 center margin_top_2 block">
                             <div class="btn-floating pulse purple center margin_bottom" v-if="l_actual != 15">
                                     +{{ l_actual }}
                             </div>
@@ -768,16 +766,14 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row">
-                                <button class="btn waves-effect waves-light col s12 m6 l4" @click="l_resetlvl">Reset level</button>
-                                <button class="btn waves-effect waves-light col s12 m6 l4" @click="l_resetstones">Reset stones</button>
-                                <button class="btn waves-effect waves-light red col s12 m12 l4" @click="l_resetall">Reset both</button>
-                            </div>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="l_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="l_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light red col s12 m12 l4" @click="l_resetall">Reset both</button>
                         </div>
 
                         <!----------------------------------------------------------------- ULTIMATE GEAR ----------------------------------------------------------------->
 
-                        <div class="col s12 m4 l4 center block">
+                        <div class="col s12 m4 l4 center margin_top_2 block">
                             <div class="btn-floating pulse red center margin_bottom" v-if="u_actual != 15">
                                 +{{ u_actual }}
                             </div>
@@ -827,11 +823,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="row">
-                                <button class="btn waves-effect waves-light btn col s12 m6 l4" @click="u_resetlvl">Reset level</button>
-                                <button class="btn waves-effect waves-light btn col s12 m6 l4" @click="u_resetstones">Reset stones</button>
-                                <button class="btn waves-effect waves-light btn red col s12 m12 l4" @click="u_resetall">Reset both</button>
-                            </div>
+                            <button class="btn waves-effect waves-light btn col s12 m6 l4" @click="u_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light btn col s12 m6 l4" @click="u_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light btn red col s12 m12 l4" @click="u_resetall">Reset both</button>
                         </div>
                     </div>
                     <br>
