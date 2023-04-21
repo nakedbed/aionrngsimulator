@@ -1,0 +1,118 @@
+/* Custom Stylesheet */
+
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+.container-fluid {
+    /* The image used */
+    background-image: url('../images/bg.jpg');
+  
+    /* Full height */
+    height: 100%; 
+  
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Turn off parallax scrolling for tablets and phones. Increase the pixels if needed */
+@media only screen and (max-device-width: 1366px) {
+  .container-fluid {
+    background-attachment: scroll;
+  }
+}
+
+.block {
+  background-origin: padding-box;
+  background-color : rgba(0, 0, 0, 0.2);
+  border-radius: 4%;
+  padding: 5px;
+}
+.icon-block {
+  padding: 0 15px;
+}
+
+.icon-block .material-icons {
+  font-size: inherit;
+}
+
+input[type=text]{
+  color: rgb(255, 255, 255);
+}
+
+/****************************************************************************************/
+
+.selected {
+  background-color:gold;
+}
+
+.min_height {
+  min-height:500px;
+}
+
+.todo-list {
+  margin-bottom: -15px;
+  margin-top: -5px;
+}
+
+.btn_stones_format {
+  height:40px;
+  width:40px;
+}
+
+.justify {
+  text-align: justify;
+}
+
+.margin_bottom {
+  margin-bottom : 13px;
+}
+
+.margin_top {
+  margin-top : 10px;
+}
+
+.padding_top {
+  padding-top : 10px;
+}
+
+.padding_bottom {
+  padding-bottom : 10px;
+}
+
+#begin_enchant{
+  background-color: rgb(73, 149, 247);
+  border-radius: 10px;
+  transition-duration : 0.3s;
+}
+
+#end_enchant{
+  background-color: rgb(28, 194, 36);
+  border-radius: 10px;
+  transition-duration : 0.3s;
+}
+
+.edit-button-custom {
+  float: left;
+  top: 2px;
+  left: 50px;
+  position: absolute;
+  display: block;
+}
+
+/* Pour que le footer fasse pas chier */
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+main {
+  flex: 1 0 auto;
+}

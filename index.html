@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.css" media="screen,projection" />
+    <!--Import style.css-->
+    <link type="text/css" rel="stylesheet" href="css/style.css" media="screen,projection" />
+    <title>Aion's RNG Simulator</title>
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Encoding -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!-- Indexable & suivi de lien par Google-->
+    <meta name="robots" content="index, follow">
+</head>
+<body>
+
+    <header>
+
+        <!----------------------------------------------------- NAVBAR ---------------------------------------------------->
+
+        <nav>
+            <div class="nav-wrapper">
+                <a href="" class="brand-logo center">Aion RNG Simulator</a>
+                <a href="" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="#"></a></li>
+                </ul>
+            </div>
+        </nav>
+        <ul class="sidenav" id="mobile-demo">
+            <li><a href="#"></a></li>
+        </ul>
+
+        <!----------------------------------------------------------------------------------------------------------------->
+
+    </header>
+
+    <main>
+
+    <!------------------------------------------------------ CORE ----------------------------------------------------->
+
+        <div class="container-fluid">
+            <div class="padding_top min_height">
+                <div id="app">
+                    <div class="padding_bottom row">
+                        <!----------------------------------------------------------------- THIRTY GEAR ----------------------------------------------------------------->
+                        <div class="col s12 m6 l6 center block">
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="thirty_actual != 15">
+                                +{{ thirty_actual }}
+                            </div>
+
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="thirty_actual == 15">
+                                +15 !
+                            </div>
+
+                            <div class="center">
+                                <img src="https://aioncodex.com/items/icon_item_pl_torso_u01.png" />
+                                <br>
+                                <span><b>Level 30 gold gear</b></span>
+                            </div>
+
+                            <div class="center" id="begin_enchant" v-if="thirty_start == 0">
+                                <p>Click on the enchantment stone to begin !</p>
+                            </div>
+                            
+                            <div class="center" id="thirty_resultat" hidden>
+                                <p>You rolled <strong id="thirty_result1"></strong> and you need below <strong id="thirty_result2"></strong></p>
+                            </div>
+
+                            <div class="center" id="end_enchant" v-if="thirty_actual == 15">
+                                <p>Congratulations, now try this out in game :)</p>
+                            </div>
+
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="thirty_stone_level <= 0" @click="thirty_toggle('thirty')" :disabled="thirty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="thirty_stone_level >= 1 && thirty_stone_level <= 20" @click="thirty_toggle('thirty')" :disabled="thirty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="thirty_stone_level >= 21 && thirty_stone_level <= 40" @click="thirty_toggle('thirty')" :disabled="thirty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone02.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="thirty_stone_level >= 41 && thirty_stone_level <= 60" @click="thirty_toggle('thirty')" :disabled="thirty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone03.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="thirty_stone_level >= 61 && thirty_stone_level <= 80" @click="thirty_toggle('thirty')" :disabled="thirty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone04.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="thirty_stone_level >= 81 && thirty_stone_level <= 100" @click="thirty_toggle('thirty')" :disabled="thirty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone05.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="thirty_stone_level >= 101 && thirty_stone_level <= 120" @click="thirty_toggle('thirty')" :disabled="thirty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone06.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="thirty_stone_level >= 121 && thirty_stone_level <= 190" @click="thirty_toggle('thirty')" :disabled="thirty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="thirty_stone_level > 191" @click="thirty_toggle('thirty')" :disabled="thirty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <span>Level <input type="text" class="center input_setclassicenchantlevel" style="width: 3rem" v-model = "thirty_stone_level" @keyup.enter = "$emit('update');"> enchantment stone</span>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Stones used</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ thirty_stones }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="thirty_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="thirty_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light red col s12 m12 l4" @click="thirty_resetall">Reset both</button>
+                            <br>
+                            <br>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle lesser supplements (+5%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleThirtyGoldLesserSupplements" type="checkbox" value="true" v-model="toggleThirtyGoldLesserSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle normal supplements (+10%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleThirtyGoldNormalSupplements" type="checkbox" value="true" v-model="toggleThirtyGoldNormalSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle greater supplements (+15%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleThirtyGoldGreaterSupplements" type="checkbox" value="true" v-model="toggleThirtyGoldGreaterSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                        </div>
+                        <!----------------------------------------------------------------- FOURTY GEAR ----------------------------------------------------------------->
+                        <div class="col s12 m6 l6 center block">
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="fourty_actual != 15">
+                                +{{ fourty_actual }}
+                            </div>
+
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="fourty_actual == 15">
+                                +15 !
+                            </div>
+
+                            <div class="center">
+                                <img src="https://aioncodex.com/items/icon_item_pl_torso_u01.png" />
+                                <br>
+                                <span><b>Level 40 gold gear</b></span>
+                            </div>
+
+                            <div class="center" id="begin_enchant" v-if="fourty_start == 0">
+                                <p>Click on the enchantment stone to begin !</p>
+                            </div>
+                            
+                            <div class="center" id="fourty_resultat" hidden>
+                                <p>You rolled <strong id="fourty_result1"></strong> and you need below <strong id="fourty_result2"></strong></p>
+                            </div>
+
+                            <div class="center" id="end_enchant" v-if="fourty_actual == 15">
+                                <p>Congratulations, now try this out in game :)</p>
+                            </div>
+
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fourty_stone_level <= 0" @click="fourty_toggle('fourty')" :disabled="fourty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fourty_stone_level >= 1 && fourty_stone_level <= 20" @click="fourty_toggle('fourty')" :disabled="fourty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fourty_stone_level >= 21 && fourty_stone_level <= 40" @click="fourty_toggle('fourty')" :disabled="fourty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone02.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fourty_stone_level >= 41 && fourty_stone_level <= 60" @click="fourty_toggle('fourty')" :disabled="fourty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone03.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fourty_stone_level >= 61 && fourty_stone_level <= 80" @click="fourty_toggle('fourty')" :disabled="fourty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone04.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fourty_stone_level >= 81 && fourty_stone_level <= 100" @click="fourty_toggle('fourty')" :disabled="fourty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone05.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fourty_stone_level >= 101 && fourty_stone_level <= 120" @click="fourty_toggle('fourty')" :disabled="fourty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone06.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fourty_stone_level >= 121 && fourty_stone_level <= 190" @click="fourty_toggle('fourty')" :disabled="fourty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fourty_stone_level > 191" @click="fourty_toggle('fourty')" :disabled="fourty_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <span>Level <input type="text" class="center input_setclassicenchantlevel" style="width: 3rem" v-model = "fourty_stone_level" @keyup.enter = "$emit('update');"> enchantment stone</span>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Stones used</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ fourty_stones }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="fourty_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="fourty_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light red col s12 m12 l4" @click="fourty_resetall">Reset both</button>
+                            <br>
+                            <br>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle lesser supplements (+5%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFourtyGoldLesserSupplements" type="checkbox" value="true" v-model="toggleFourtyGoldLesserSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle normal supplements (+10%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFourtyGoldNormalSupplements" type="checkbox" value="true" v-model="toggleFourtyGoldNormalSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle greater supplements (+15%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFourtyGoldGreaterSupplements" type="checkbox" value="true" v-model="toggleFourtyGoldGreaterSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <!----------------------------------------------------------------- FIFTY GOLD GEAR ----------------------------------------------------------------->
+                    <div class="row" style="margin-bottom: -10px;">
+                        <div class="col s12 m6 l6 center block">
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="fifty_gold_actual != 15">
+                                +{{ fifty_gold_actual }}
+                            </div>
+
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="fifty_gold_actual == 15">
+                                +15 !
+                            </div>
+
+                            <div class="center">
+                                <img src="https://aioncodex.com/items/icon_item_pl_torso_u01.png" />
+                                <br>
+                                <span><b>Level 50 gold gear</b></span>
+                            </div>
+
+                            <div class="center" id="begin_enchant" v-if="fifty_gold_start == 0">
+                                <p>Click on the enchantment stone to begin !</p>
+                            </div>
+                            
+                            <div class="center" id="fifty_gold_resultat" hidden>
+                                <p>You rolled <strong id="fifty_gold_result1"></strong> and you need below <strong id="fifty_gold_result2"></strong></p>
+                            </div>
+
+                            <div class="center" id="end_enchant" v-if="fifty_gold_actual == 15">
+                                <p>Congratulations, now try this out in game :)</p>
+                            </div>
+
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_gold_stone_level <= 0" @click="fifty_gold_toggle('fifty_gold')" :disabled="fifty_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_gold_stone_level >= 1 && fifty_gold_stone_level <= 20" @click="fifty_gold_toggle('fifty_gold')" :disabled="fifty_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_gold_stone_level >= 21 && fifty_gold_stone_level <= 40" @click="fifty_gold_toggle('fifty_gold')" :disabled="fifty_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone02.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_gold_stone_level >= 41 && fifty_gold_stone_level <= 60" @click="fifty_gold_toggle('fifty_gold')" :disabled="fifty_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone03.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_gold_stone_level >= 61 && fifty_gold_stone_level <= 80" @click="fifty_gold_toggle('fifty_gold')" :disabled="fifty_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone04.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_gold_stone_level >= 81 && fifty_gold_stone_level <= 100" @click="fifty_gold_toggle('fifty_gold')" :disabled="fifty_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone05.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_gold_stone_level >= 101 && fifty_gold_stone_level <= 120" @click="fifty_gold_toggle('fifty_gold')" :disabled="fifty_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone06.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_gold_stone_level >= 121 && fifty_gold_stone_level <= 190" @click="fifty_gold_toggle('fifty_gold')" :disabled="fifty_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_gold_stone_level > 191" @click="fifty_gold_toggle('fifty_gold')" :disabled="fifty_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <span>Level <input type="text" class="center input_setclassicenchantlevel" style="width: 3rem" v-model = "fifty_gold_stone_level" @keyup.enter = "$emit('update');"> enchantment stone</span>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Stones used</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ fifty_gold_stones }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="fifty_gold_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="fifty_gold_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light red col s12 m12 l4" @click="fifty_gold_resetall">Reset both</button>
+                            <br>
+                            <br>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle lesser supplements (+5%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyGoldLesserSupplements" type="checkbox" value="true" v-model="toggleFiftyGoldLesserSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle normal supplements (+10%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyGoldNormalSupplements" type="checkbox" value="true" v-model="toggleFiftyGoldNormalSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle greater supplements (+15%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyGoldGreaterSupplements" type="checkbox" value="true" v-model="toggleFiftyGoldGreaterSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                        </div>
+                        <!----------------------------------------------------------------- FIFTY ETERNAL GEAR ----------------------------------------------------------------->
+                        <div class="col s12 m6 l6 center block">
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="fifty_eternal_actual != 15">
+                                +{{ fifty_eternal_actual }}
+                            </div>
+
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="fifty_eternal_actual == 15">
+                                +15 !
+                            </div>
+
+                            <div class="center">
+                                <img src="https://aioncodex.com/items/icon_item_pl_torso_e01.png" />
+                                <br>
+                                <span><b>Level 50 eternal gear</b></span>
+                            </div>
+
+                            <div class="center" id="begin_enchant" v-if="fifty_eternal_start == 0">
+                                <p>Click on the enchantment stone to begin !</p>
+                            </div>
+                            
+                            <div class="center" id="fifty_eternal_resultat" hidden>
+                                <p>You rolled <strong id="fifty_eternal_result1"></strong> and you need below <strong id="fifty_eternal_result2"></strong></p>
+                            </div>
+
+                            <div class="center" id="end_enchant" v-if="fifty_eternal_actual == 15">
+                                <p>Congratulations, now try this out in game :)</p>
+                            </div>
+
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_eternal_stone_level <= 0" @click="fifty_eternal_toggle('fifty_eternal')" :disabled="fifty_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_eternal_stone_level >= 1 && fifty_eternal_stone_level <= 20" @click="fifty_eternal_toggle('fifty_eternal')" :disabled="fifty_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_eternal_stone_level >= 21 && fifty_eternal_stone_level <= 40" @click="fifty_eternal_toggle('fifty_eternal')" :disabled="fifty_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone02.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_eternal_stone_level >= 41 && fifty_eternal_stone_level <= 60" @click="fifty_eternal_toggle('fifty_eternal')" :disabled="fifty_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone03.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_eternal_stone_level >= 61 && fifty_eternal_stone_level <= 80" @click="fifty_eternal_toggle('fifty_eternal')" :disabled="fifty_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone04.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_eternal_stone_level >= 81 && fifty_eternal_stone_level <= 100" @click="fifty_eternal_toggle('fifty_eternal')" :disabled="fifty_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone05.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_eternal_stone_level >= 101 && fifty_eternal_stone_level <= 120" @click="fifty_eternal_toggle('fifty_eternal')" :disabled="fifty_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone06.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_eternal_stone_level >= 121 && fifty_eternal_stone_level <= 190" @click="fifty_eternal_toggle('fifty_eternal')" :disabled="fifty_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_eternal_stone_level > 191" @click="fifty_eternal_toggle('fifty_eternal')" :disabled="fifty_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <span>Level <input type="text" class="center input_setclassicenchantlevel" style="width: 3rem" v-model = "fifty_eternal_stone_level" @keyup.enter = "$emit('update');"> enchantment stone</span>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Stones used</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ fifty_eternal_stones }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="fifty_eternal_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="fifty_eternal_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light red col s12 m12 l4" @click="fifty_eternal_resetall">Reset both</button>
+                            <br>
+                            <br>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle lesser supplements (+5%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyEternalLesserSupplements" type="checkbox" value="true" v-model="toggleFiftyEternalLesserSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle normal supplements (+10%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyEternalNormalSupplements" type="checkbox" value="true" v-model="toggleFiftyEternalNormalSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle greater supplements (+15%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyEternalGreaterSupplements" type="checkbox" value="true" v-model="toggleFiftyEternalGreaterSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <!----------------------------------------------------------------- FIFTYFIVE GOLD GEAR ----------------------------------------------------------------->
+                    <div class="row" style="margin-bottom: -10px;">
+                        <div class="col s12 m6 l6 center block">
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="fifty_five_gold_actual != 15">
+                                +{{ fifty_five_gold_actual }}
+                            </div>
+
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="fifty_five_gold_actual == 15">
+                                +15 !
+                            </div>
+
+                            <div class="center">
+                                <img src="https://aioncodex.com/items/icon_item_pl_torso_u01.png" />
+                                <br>
+                                <span><b>Level 55 gold gear</b></span>
+                            </div>
+
+                            <div class="center" id="begin_enchant" v-if="fifty_five_gold_start == 0">
+                                <p>Click on the enchantment stone to begin !</p>
+                            </div>
+                            
+                            <div class="center" id="fifty_five_gold_resultat" hidden>
+                                <p>You rolled <strong id="fifty_five_gold_result1"></strong> and you need below <strong id="fifty_five_gold_result2"></strong></p>
+                            </div>
+
+                            <div class="center" id="end_enchant" v-if="fifty_five_gold_actual == 15">
+                                <p>Congratulations, now try this out in game :)</p>
+                            </div>
+
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_gold_stone_level <= 0" @click="fifty_five_gold_toggle('fifty_five_gold')" :disabled="fifty_five_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_gold_stone_level >= 1 && fifty_five_gold_stone_level <= 20" @click="fifty_five_gold_toggle('fifty_five_gold')" :disabled="fifty_five_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_gold_stone_level >= 21 && fifty_five_gold_stone_level <= 40" @click="fifty_five_gold_toggle('fifty_five_gold')" :disabled="fifty_five_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone02.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_gold_stone_level >= 41 && fifty_five_gold_stone_level <= 60" @click="fifty_five_gold_toggle('fifty_five_gold')" :disabled="fifty_five_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone03.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_gold_stone_level >= 61 && fifty_five_gold_stone_level <= 80" @click="fifty_five_gold_toggle('fifty_five_gold')" :disabled="fifty_five_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone04.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_gold_stone_level >= 81 && fifty_five_gold_stone_level <= 100" @click="fifty_five_gold_toggle('fifty_five_gold')" :disabled="fifty_five_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone05.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_gold_stone_level >= 101 && fifty_five_gold_stone_level <= 120" @click="fifty_five_gold_toggle('fifty_five_gold')" :disabled="fifty_five_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone06.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_gold_stone_level >= 121 && fifty_five_gold_stone_level <= 190" @click="fifty_five_gold_toggle('fifty_five_gold')" :disabled="fifty_five_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_gold_stone_level > 191" @click="fifty_five_gold_toggle('fifty_five_gold')" :disabled="fifty_five_gold_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <span>Level <input type="text" class="center input_setclassicenchantlevel" style="width: 3rem" v-model = "fifty_five_gold_stone_level" @keyup.enter = "$emit('update');"> enchantment stone</span>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Stones used</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ fifty_five_gold_stones }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="fifty_five_gold_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="fifty_five_gold_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light red col s12 m12 l4" @click="fifty_five_gold_resetall">Reset both</button>
+                            <br>
+                            <br>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle lesser supplements (+5%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyfiveGoldLesserSupplements" type="checkbox" value="true" v-model="toggleFiftyfiveGoldLesserSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle normal supplements (+10%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyfiveGoldNormalSupplements" type="checkbox" value="true" v-model="toggleFiftyfiveGoldNormalSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle greater supplements (+15%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyfiveGoldGreaterSupplements" type="checkbox" value="true" v-model="toggleFiftyfiveGoldGreaterSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                        </div>
+                        <!----------------------------------------------------------------- FIFTYFIVE ETERNAL GEAR ----------------------------------------------------------------->
+                        <div class="col s12 m6 l6 center block">
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="fifty_five_eternal_actual != 15">
+                                +{{ fifty_five_eternal_actual }}
+                            </div>
+
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="fifty_five_eternal_actual == 15">
+                                +15 !
+                            </div>
+
+                            <div class="center">
+                                <img src="https://aioncodex.com/items/icon_item_pl_torso_e01.png" />
+                                <br>
+                                <span><b>Level 55 eternal gear</b></span>
+                            </div>
+
+                            <div class="center" id="begin_enchant" v-if="fifty_five_eternal_start == 0">
+                                <p>Click on the enchantment stone to begin !</p>
+                            </div>
+                            
+                            <div class="center" id="fifty_five_eternal_resultat" hidden>
+                                <p>You rolled <strong id="fifty_five_eternal_result1"></strong> and you need below <strong id="fifty_five_eternal_result2"></strong></p>
+                            </div>
+
+                            <div class="center" id="end_enchant" v-if="fifty_five_eternal_actual == 15">
+                                <p>Congratulations, now try this out in game :)</p>
+                            </div>
+
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_eternal_stone_level <= 0" @click="fifty_five_eternal_toggle('fifty_five_eternal')" :disabled="fifty_five_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_eternal_stone_level >= 1 && fifty_five_eternal_stone_level <= 20" @click="fifty_five_eternal_toggle('fifty_five_eternal')" :disabled="fifty_five_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_eternal_stone_level >= 21 && fifty_five_eternal_stone_level <= 40" @click="fifty_five_eternal_toggle('fifty_five_eternal')" :disabled="fifty_five_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone02.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_eternal_stone_level >= 41 && fifty_five_eternal_stone_level <= 60" @click="fifty_five_eternal_toggle('fifty_five_eternal')" :disabled="fifty_five_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone03.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_eternal_stone_level >= 61 && fifty_five_eternal_stone_level <= 80" @click="fifty_five_eternal_toggle('fifty_five_eternal')" :disabled="fifty_five_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone04.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_eternal_stone_level >= 81 && fifty_five_eternal_stone_level <= 100" @click="fifty_five_eternal_toggle('fifty_five_eternal')" :disabled="fifty_five_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone05.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_eternal_stone_level >= 101 && fifty_five_eternal_stone_level <= 120" @click="fifty_five_eternal_toggle('fifty_five_eternal')" :disabled="fifty_five_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone06.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_eternal_stone_level >= 121 && fifty_five_eternal_stone_level <= 190" @click="fifty_five_eternal_toggle('fifty_five_eternal')" :disabled="fifty_five_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" v-if="fifty_five_eternal_stone_level > 191" @click="fifty_five_eternal_toggle('fifty_five_eternal')" :disabled="fifty_five_eternal_disabled == 1 ? true : false"
+                                style="background: url(https://aioncodex.com/items/icon_item_enchantstone07.png)"></button>
+                                <span>Level <input type="text" class="center input_setclassicenchantlevel" style="width: 3rem" v-model = "fifty_five_eternal_stone_level" @keyup.enter = "$emit('update');"> enchantment stone</span>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Stones used</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ fifty_five_eternal_stones }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="fifty_five_eternal_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="fifty_five_eternal_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light red col s12 m12 l4" @click="fifty_five_eternal_resetall">Reset both</button>
+                            <br>
+                            <br>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle lesser supplements (+5%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyfiveEternalLesserSupplements" type="checkbox" value="true" v-model="toggleFiftyfiveEternalLesserSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle normal supplements (+10%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyfiveEternalNormalSupplements" type="checkbox" value="true" v-model="toggleFiftyfiveEternalNormalSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                            <div class="switch col s4 m4 l4">
+                                <label>Toggle greater supplements (+15%)</label>
+                                <br>
+                                <label>
+                                    OFF
+                                    <input class="toggleFiftyfiveEternalGreaterSupplements" type="checkbox" value="true" v-model="toggleFiftyfiveEternalGreaterSupplements">
+                                    <span class="lever"></span>
+                                    ON
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <!----------------------------------------------------------------- ANCIENT GEAR ----------------------------------------------------------------->
+
+                    <div class="row" style="margin-bottom: -10px;">
+                        <div class="col s12 m4 l4 center block">
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="a_actual != 15">
+                                +{{ a_actual }}
+                            </div>
+
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="a_actual == 15">
+                                +15 !
+                            </div>
+
+                            <div class="center">
+                                <img src="https://aionpowerbook.com/item/icon/icon_item_equip_pl_torso_a01.png" /><br>
+                                <span><b>Ancient gear</b></span>
+                            </div>
+
+                            <div class="center" id="begin_enchant" v-if="a_start == 0">
+                                <p>Click on one of the 3 stones to begin !</p>
+                            </div>
+
+                            <div class="center" id="a_resultat" hidden>
+                                <p>You roll <strong id="a_result1"></strong> and you need below <strong id="a_result2"></strong></p>
+                            </div>
+
+                            <div class="center" id="end_enchant" v-if="a_actual == 15">
+                                <p>Congratulations, now try this out in game lel</p>
+                            </div>
+
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="a_toggle('a')" :disabled="a_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_enchant_pve_a01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="a_toggle('l')" :disabled="a_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_enchant_pve_r01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="a_toggle('u')" :disabled="a_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_enchant_pve_f01.png)"></button>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Ancient</th>
+                                            <th>Legendary</th>
+                                            <th>Ultimate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ a_stones[0] }}</td>
+                                            <td>{{ a_stones[1] }}</td>
+                                            <td>{{ a_stones[2] }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <button class="btn waves-effect waves-light col s12 m6 l4" @click="a_resetlvl">Reset level</button>
+                                <button class="btn waves-effect waves-light col s12 m6 l4" @click="a_resetstones">Reset stones</button>
+                                <button class="btn waves-effect waves-light red col s12 m12 l4" @click="a_resetall">Reset both</button>
+                            </div>
+                        </div>
+
+                        <!----------------------------------------------------------------- LEGENDARY GEAR ----------------------------------------------------------------->
+
+                        <div class="col s12 m4 l4 center block">
+                            <div class="btn-floating pulse purple center margin_bottom" v-if="l_actual != 15">
+                                    +{{ l_actual }}
+                            </div>
+                        
+                            <div class="btn-floating pulse purple center margin_bottom" v-if="l_actual == 15">
+                                +15 !
+                            </div>
+                        
+                            <div class="center">
+                                <img src="https://aionpowerbook.com/item/icon/icon_item_equip_pl_torso_r01.png" /><br>
+                                <span><b>Legendary gear</b></span>
+                            </div>
+                        
+                            <div class="center" id="begin_enchant" v-if="l_start == 0">
+                                <p>Click on one of the 3 stones to begin !</p>
+                            </div>
+                        
+                            <div class="center" id="l_resultat" hidden>
+                                <p>You roll <strong id="l_result1"></strong> and you need below <strong id="l_result2"></strong></p>
+                            </div>
+                        
+                            <div class="center" id="end_enchant" v-if="l_actual == 15">
+                                <p>Congratulations, now try this out in game lel</p>
+                            </div>
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="l_toggle('a')" :disabled="l_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_enchant_pve_a01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="l_toggle('l')" :disabled="l_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_enchant_pve_r01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="l_toggle('u')" :disabled="l_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_enchant_pve_f01.png)"></button>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Ancient</th>
+                                            <th>Legendary</th>
+                                            <th>Ultimate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ l_stones[0] }}</td>
+                                            <td>{{ l_stones[1] }}</td>
+                                            <td>{{ l_stones[2] }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <button class="btn waves-effect waves-light col s12 m6 l4" @click="l_resetlvl">Reset level</button>
+                                <button class="btn waves-effect waves-light col s12 m6 l4" @click="l_resetstones">Reset stones</button>
+                                <button class="btn waves-effect waves-light red col s12 m12 l4" @click="l_resetall">Reset both</button>
+                            </div>
+                        </div>
+
+                        <!----------------------------------------------------------------- ULTIMATE GEAR ----------------------------------------------------------------->
+
+                        <div class="col s12 m4 l4 center block">
+                            <div class="btn-floating pulse red center margin_bottom" v-if="u_actual != 15">
+                                +{{ u_actual }}
+                            </div>
+                        
+                            <div class="btn-floating pulse red center margin_bottom" v-if="u_actual == 15">
+                                +15 !
+                            </div>
+                            <div class="center">
+                                <img src="https://aionpowerbook.com/item/icon/icon_item_equip_pl_torso_f01.png" /><br>
+                                <span><b>Ultimate gear</b></span>
+                            </div>
+                            <div class="center" id="begin_enchant" v-if="u_start == 0">
+                                <p>Click on one of the 3 stones to begin !</p>
+                            </div>
+                        
+                            <div class="center" id="u_resultat" hidden>
+                                <p>You roll <strong id="u_result1"></strong> and you need below <strong id="u_result2"></strong></p>
+                            </div>
+                        
+                            <div class="center" id="end_enchant" v-if="u_actual == 15">
+                                <p>Congratulations, now try this out in game lel</p>
+                            </div>
+
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="u_toggle('a')" :disabled="u_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_enchant_pve_a01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="u_toggle('l')" :disabled="u_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_enchant_pve_r01.png)"></button>
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="u_toggle('u')" :disabled="u_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_enchant_pve_f01.png)"></button>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Ancient</th>
+                                            <th>Legendary</th>
+                                            <th>Ultimate</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ u_stones[0] }}</td>
+                                            <td>{{ u_stones[1] }}</td>
+                                            <td>{{ u_stones[2] }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <button class="btn waves-effect waves-light btn col s12 m6 l4" @click="u_resetlvl">Reset level</button>
+                                <button class="btn waves-effect waves-light btn col s12 m6 l4" @click="u_resetstones">Reset stones</button>
+                                <button class="btn waves-effect waves-light btn red col s12 m12 l4" @click="u_resetall">Reset both</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <!----------------------------------------------------------------- STIGMA ENCHANTMENT STONES ----------------------------------------------------------------->
+
+
+                    <!-- QUAND CA FAIT +1 APRES AVOIR EDIT LA VALEUR EN DOUBLE CLIQUANT ETC, CA RAJOUTE 1 AU LIEU DE FAIRE +1 (initial : +1 -> +11 (ou +12 en cas de crit etc) au lieu de faire +2 (ou +3 en cas de crit etc) --> 
+                   
+                   
+                    <div class="row">
+                        <div class="col s12 m4 offset-m4 l4 offset-l4 center block">
+                            <ul class="todo-list">
+                                <div v-if ="stigmaedit == false">
+                                    <div class="btn-floating pulse orange center margin_bottom" @dblclick = "stigmaedit = true">+{{ s_actual }}</div>
+                                </div>
+                                <div class="row">
+                                    <input class="col s2 offset-s5 m2 offset-m5 l2 offset-l5 center input_setenchantlevel" v-show = "stigmaedit == true" v-model = "s_actual" v-on:blur= "stigmaedit=false; s_disabled=0; $emit('update');" @keyup.enter = "stigmaedit=false; s_disabled=0; $emit('update');">
+                                </div>
+                            </ul>
+                            <!-- CA RAJOUTE LE CHIFFRE ENTRE DANS L'INPUT A GAUCHE DU NUMERO DEJA INSCRIT AU LIEU DE LE REMPLACER ??????????????????????????????????????-->
+                            <div class="center">
+                                <img src="https://aionpowerbook.com/item/icon/icon_item_enhanced_stigma03_ba_songofgale_g1.png" /><br>
+                                <span><b>Stigma</b></span>
+                            </div>
+                            <div class="center" id="begin_enchant" v-if="s_start == 0">
+                                <p>Click on the stigma enchantment stone or double click on the circle above to edit the value !</p>
+                            </div>
+
+                            <div class="center" id="s_resultat" v-if="s_actual != 15" hidden>
+                                <p><strong id="s_info"></strong>You rolled <strong id="s_result1"></strong> and you need below <strong id="s_result2"></strong></p>
+                            </div>
+
+                            <div class="center" v-if="s_actual == 15 && stigmaedit != true">
+                                <p>Congratulations, your stigma is now OP as hell pog</p>
+                            </div>
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="s_toggle('s')" :disabled="s_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_matter_enchant_stigma_01.png)"></button>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Number of stones used</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ s_stones }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="s_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="s_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light red col s12 m12 l4" @click="s_resetall">Reset both</button>
+                            <br>
+                            <br>
+                                
+                            <div class="switch col s6 m6 l6">
+                                <label>+9 Safe Spot</label>
+                                <br>
+                                <label>
+                                    Off
+                                    <input type="checkbox" value="true" v-model="plus9safespot">
+                                    <span class="lever"></span>
+                                    On
+                                </label>
+                            </div>
+
+                            <div class="switch col s6 m6 l6">
+                                <label>+12 Safe Spot</label>
+                                <br>
+                                <label>
+                                    Off
+                                    <input type="checkbox" value="true" v-model="plus12safespot">
+                                    <span class="lever"></span>
+                                    On
+                                </label>
+                            </div>
+
+                            <div class="switch col s4 offset-s4 m4 offset-m4 l4 offset-l4">
+                                <label>Success rate after +9</label>
+                                <br>
+                                <label>
+                                    20%
+                                    <input type="checkbox" value="true" v-model="togglesuccessrate">
+                                    <span class="lever"></span>
+                                    35%
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="fixed-action-btn">
+                            <a id="menu" class="btn-floating btn-large red" onclick="$('.tap-target').tapTarget('open')">
+                            <i class="material-icons" style="font-size: 40px">help_outline</i>
+                            </a>  
+                        </div>
+                        <div class="tap-target" data-target="menu" style="padding-left: 55px;">
+                            <div class="tap-target-content center">
+                                <h4 class="white-text">Color description :</h5>
+                                <h5 class="white-text"><span style="height: 10px; width: 10px; background-color: red; border-radius: 5px;">Fail -1</span></h5>
+                                <h5 class="white-text"><span style="height: 10px; width: 10px; background-color: Brown; border-radius: 5px;">Fail but same level</span></h5>
+                                <h5 class="white-text"><span style="height: 10px; width: 10px; background-color: Green; border-radius: 5px; color: black">Success +1</span></h5>
+                                <h5 class="white-text"><span style="height: 10px; width: 10px; background-color: gold; border-radius: 5px; color: black">Success +2</span></h5>
+                                <h5 class="white-text"><span style="height: 10px; width: 10px; background-color: Orange; border-radius: 5px; color: black">Success +3 (stigmas only)</span></h5>
+                            </div>
+                        </div>
+
+                        <!----------------------------------------------------------------- DAEVANION SKILLS ----------------------------------------------------------------->
+                        <!--<div class="col s4 offset-s1 m4 offset-m1 l4 offset-l1 center btn-floating center margin_bottom" style="margin-top:200px;">
+                            DAEVANION SKILLS SIMULATOR IN PROGRESS
+                        </div>
+
+                        <div class="col s4 offset-s1 m4 offset-m1 l4 offset-l1 center">
+                            <ul class="todo-list">
+                                <div v-show ="stigmaedit == false">
+                                    <div class="btn-floating pulse orange center margin_bottom" @dblclick = "stigmaedit = true">+{{ s_actual }}</div>
+                                </div>
+                                <div class="row">
+                                    <input class="col s2 offset-s5 m2 offset-m5 l2 offset-l5 center input_setenchantlevel" v-show = "stigmaedit == true" v-model = "s_actual" v-on:blur= "stigmaedit=false; $emit('update')" @keyup.enter = "stigmaedit=false; $emit('update')">
+                                </div>
+                            </ul>
+
+                            <div style="display : none;"class="btn-floating pulse orange center margin_bottom">*
+                            </div>
+
+                            <div class="btn-floating pulse orange center margin_bottom" v-if="s_actual == 15 && stigmaedit != true">
+                                +15 !
+                            </div>
+                                
+                            <div class="center">
+                                <img src="https://aionpowerbook.com/item/icon/icon_item_enhanced_stigma03_ba_songofgale_g1.png" />
+                            </div>
+                            <div class="center" id="begin_enchant" v-if="s_start == 0">
+                                <p>Click on the stigma enchantment stone to begin !</p>
+                            </div>
+
+                            <div class="center" id="s_resultat" v-if="s_actual != 15" hidden>
+                                <p><strong id="s_info"></strong>You rolled <strong id="s_result1"></strong> and you need below <strong id="s_result2"></strong></p>
+                            </div>
+
+                            <div class="center" id="end_enchant" v-if="s_actual == 15 && stigmaedit != true">
+                                <p>Congratulations, your stigma is now OP as hell pog</p>
+                            </div>
+                            <div class="center">
+                                <button class="waves-effect waves-light btn btn_stones_format" @click="s_toggle('s')" :disabled="s_disabled == 1 ? true : false"
+                                    style="background: url(https://aionpowerbook.com/item/icon/icon_item_matter_enchant_stigma_01.png)"></button>
+                            </div>
+                            <div>
+                                <table class="highlight centered responsive-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Number of stones used</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ s_stones }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="s_resetlvl">Reset level</button>
+                            <button class="btn waves-effect waves-light col s12 m6 l4" @click="s_resetstones">Reset stones</button>
+                            <button class="btn waves-effect waves-light red col s12 m12 l4" @click="s_resetall">Reset both</button>
+                            <br>
+                            <br>
+                                
+                            <div class="switch col s6 m6 l6">
+                                <label>+9 Safe Spot</label>
+                                <br>
+                                <label>
+                                    Off
+                                    <input type="checkbox" value="true" v-model="plus9safespot">
+                                    <span class="lever"></span>
+                                    On
+                                </label>
+                            </div>
+
+                            <div class="switch col s6 m6 l6">
+                                <label>+12 Safe Spot</label>
+                                <br>
+                                <label>
+                                    Off
+                                    <input type="checkbox" value="true" v-model="plus12safespot">
+                                    <span class="lever"></span>
+                                    On
+                                </label>
+                            </div>
+
+                            <div class="switch col s4 offset-s4 m4 offset-m4 l4 offset-l4">
+                                <label>Success rate after +9</label>
+                                <br>
+                                <label>
+                                    20%
+                                    <input type="checkbox" value="true" v-model="togglesuccessrate">
+                                    <span class="lever"></span>
+                                    35%
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="fixed-action-btn">
+                            <a id="menu" class="btn-floating btn-large red" onclick="$('.tap-target').tapTarget('open')">
+                            <i class="material-icons" style="font-size: 40px">help_outline</i>
+                            </a>  
+                        </div>
+                        <div class="tap-target" data-target="menu" style="padding-left: 55px;">
+                            <div class="tap-target-content center">
+                                <h4 class="white-text">Color description :</h5>
+                                <h5 class="white-text"><span style="height: 10px; width: 10px; background-color: red; border-radius: 5px;">Fail -1</span></h5>
+                                <h5 class="white-text"><span style="height: 10px; width: 10px; background-color: Brown; border-radius: 5px;">Fail but same level</span></h5>
+                                <h5 class="white-text"><span style="height: 10px; width: 10px; background-color: Green; border-radius: 5px; color: black">Success +1</span></h5>
+                                <h5 class="white-text"><span style="height: 10px; width: 10px; background-color: gold; border-radius: 5px; color: black">Success +2</span></h5>
+                                <h5 class="white-text"><span style="height: 10px; width: 10px; background-color: Orange; border-radius: 5px; color: black">Success +3 (stigmas only)</span></h5>
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+
+<!----------------------------------------------------------------------------------------------------------------->
+
+<!-------------------------------- JavaScript at end of body for optimized loading -------------------------------->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!-- development version, includes helpful console warnings -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- production version, optimized for size and speed -->
+<!--<script src="https://cdn.jsdelivr.net/npm/vue"></script>-->
+<script type="text/javascript" src="js/materialize.js"></script>
+<script type="text/javascript" src="js/plugins.js"></script>
+
+<!----------------------------------------------------------------------------------------------------------------->
+<footer class="page-footer footer_custom">
+    <div class="footer-copyright">
+        <div class="container">
+        © 2019-2023 Copyright Nakedbed™
+        <a class="grey-text text-lighten-4 right" target="_blank" href="https://aionpowerbook.com/powerbook/6.0_Update_-_Enchanting_Rates">Enchantment rates source (6.5 table, same for 7.0)</a>
+        <br>
+        <a class="grey-text text-lighten-4 right" target="_blank" href="./images/ench_stones_rate_source_classic.PNG"> Enchantment rates source (Aion Classic)</a>
+        <br>
+        <a class="grey-text text-lighten-4 right" target="_blank" href="./images/stigma_stones_rate_source.PNG"> Stigma enchantment rates source</a> 
+        </div>
+    </div>
+</footer>
+          
+</html>
