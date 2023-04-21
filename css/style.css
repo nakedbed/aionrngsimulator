@@ -84,7 +84,7 @@ input[type=text]{
 
 @media only screen and (max-width: 600px) {
   .margin_top_2 {
-    margin-top : 20px;
+    margin-top : 50px;
   }
 }
 
